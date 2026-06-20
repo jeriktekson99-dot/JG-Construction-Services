@@ -20,13 +20,30 @@ interface Project {
 
 interface PortfolioPageProps {
   onScrollToSection: (id: string) => void;
+  initialSelectedProjectId?: string | null;
+  onClearSelectedProject?: () => void;
 }
 
-export default function PortfolioPage({ onScrollToSection }: PortfolioPageProps) {
+export default function PortfolioPage({ 
+  onScrollToSection,
+  initialSelectedProjectId,
+  onClearSelectedProject
+}: PortfolioPageProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedStatus, setSelectedStatus] = useState<string>('Completed');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  React.useEffect(() => {
+    if (initialSelectedProjectId) {
+      const found = projects.find(p => p.id === initialSelectedProjectId);
+      if (found) {
+        setSelectedProject(found);
+      }
+    } else {
+      setSelectedProject(null);
+    }
+  }, [initialSelectedProjectId]);
 
   const categories = ['All', 'Structural Design', 'Commercial Build', 'Industrial Frameworks', 'Civil Works'] as const;
 
@@ -161,6 +178,9 @@ export default function PortfolioPage({ onScrollToSection }: PortfolioPageProps)
         project={selectedProject} 
         onBack={() => {
           setSelectedProject(null);
+          if (onClearSelectedProject) {
+            onClearSelectedProject();
+          }
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         onScrollToSection={onScrollToSection}

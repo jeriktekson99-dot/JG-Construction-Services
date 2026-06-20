@@ -3,53 +3,55 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Maximize2, Building, Layers, Milestone, Info, X } from 'lucide-react';
 import { ShowcaseProject } from '../types';
 
-export default function Showcase() {
-  const [selectedProject, setSelectedProject] = useState<ShowcaseProject | null>(null);
+interface ShowcaseProps {
+  onProjectClick: (projectId: string) => void;
+}
 
+export default function Showcase({ onProjectClick }: ShowcaseProps) {
   const projects: ShowcaseProject[] = [
     {
-      id: "commercial-tower",
-      title: "The Vertex Corporate Plaza",
-      location: "Metro Financial Center",
-      category: "Commercial Development",
+      id: "proj-1",
+      title: "Steel Truss Logistics Warehouse",
+      location: "Cavite",
+      category: "Industrial Frameworks",
       year: "2025",
-      image: "/src/assets/images/commercial_development_1780500228422.png",
-      scope: "Commercial Development / Core Structural Design",
-      details: [
-        "Dynamic seismic core reinforcement design spanning 42 floors",
-        "Over 12,000 tons of high-strength structural grade-50 steel",
-        "Wind-tunnel load computations optimized deflection ratios by 18%",
-        "Designed to exceed Class-A local commercial resistance mandates"
-      ]
-    },
-    {
-      id: "industrial-retrofit",
-      title: "Omni Logistics Retrofitting Works",
-      location: "Industrial Corridor Sector 4",
-      category: "Industrial Structural Retrofitting",
-      year: "2024",
       image: "/src/assets/images/industrial_retrofit_1780500246965.png",
-      scope: "Industrial Structural Retrofitting & Load Expansion",
+      scope: "Direct structural framework engineering, clear-span steel positioning, welding inspections, and gantry rail alignment.",
       details: [
-        "Retrofitting structural trusses to expand live-load capabilities by 45%",
-        "Implemented custom anti-vibration anchor points for precision production line machinery",
-        "Zero interruption to client shipping operations during steel component staging and welding",
-        "Piped system restructuring designed for high-abrasion fluid dynamics"
+        "Designed to bear severe typhonic wind loads up to 280 KPH",
+        "Utilizes highly-optimized rigid gusset plate connections to distribute sheer forces evenly across structural frames",
+        "Completed under Universal Logistics Inc. with 100% Structural Safety Audit Passed",
+        "Unified wind pressure calculation: F_wind = C_q × q_s × I_w"
       ]
     },
     {
-      id: "bridge-infrastructure",
-      title: "High-Tolerance Archway Crossing",
-      location: "Municipal Central Bypass",
-      category: "Structural Archway Framework",
-      year: "2025",
-      image: "/src/assets/images/civil_infrastructure_1780500263690.png",
-      scope: "Civil Infrastructure / Reinforcement Works",
+      id: "proj-3",
+      title: "Seismic Retrofitting Project Alpha",
+      location: "Tayabas",
+      category: "Structural Design",
+      year: "2024",
+      image: "/src/assets/images/field_excellence_operations_1780503096054.png",
+      scope: "Carbon-fiber column wrapping (CFRP), post-tension anchor placements, load recalculation distributions, and active in-process welding.",
       details: [
-        "Advanced concrete-to-steel modular cantilever system fabrication",
-        "High-tolerance pre-cast girders installed over critical water-flow channels",
-        "Structured stress-testing sensor arrays integrated during structural pour",
-        "Project delivered 14 calendar days ahead of public launch framework deadline"
+        "Implemented structural carbon-fiber jacket laminates (CFRP) to raise shear tolerances by 140%",
+        "National Building Safety Standard Approved with direct certification alignment",
+        "Eliminated dead-loads without reducing the physical building footprint",
+        "Structural formula verified: V_b = C_v × I × W / (R_w × T)"
+      ]
+    },
+    {
+      id: "proj-8",
+      title: "High-Load Structural Slab Engineering",
+      location: "Manila",
+      category: "Structural Design",
+      year: "2023",
+      image: "/src/assets/images/blueprint_cad_1780503663960.png",
+      scope: "Finite element shear evaluation drawings, rebar grid designs, heavy slab structural modeling, and strict compliance certification.",
+      details: [
+        "Calculated structural distribution model enabling heavy vehicle loading parking decks",
+        "Direct Structural Engineering Stamp successfully executed by licensed professional engineers",
+        "Enabled heavy vehicle parking decks to sit safely above high-span retail units",
+        "Ultimate design stress bending moments calibrated perfectly: M_ultimate = w_load × l^2 / 8"
       ]
     }
   ];
@@ -86,7 +88,7 @@ export default function Showcase() {
               <div
                 key={proj.id}
                 className="group cursor-pointer"
-                onClick={() => setSelectedProject(proj)}
+                onClick={() => onProjectClick(proj.id)}
               >
                 {/* Image Container with Thin Black Border */}
                 <div className={`relative aspect-4/3 overflow-hidden border border-black bg-gray-50 transition-all duration-300 ${
@@ -128,90 +130,14 @@ export default function Showcase() {
                     {proj.title}
                   </h3>
 
-                  <p className="font-sans text-xs text-black font-extrabold tracking-tight underline group-hover:text-industrial-red transition-all flex items-center gap-1">
-                    <span>Scope: {proj.scope}</span>
-                  </p>
+                  <span className="font-mono text-[10px] text-gray-700 font-bold uppercase tracking-wider group-hover:text-industrial-red transition-colors flex items-center gap-1">
+                    View Project Blueprint & Specs →
+                  </span>
                 </div>
               </div>
             );
           })}
         </div>
-
-        {/* Project Detailed Specifications Modal Floor overlay to prevent iframe issues */}
-        <AnimatePresence>
-          {selectedProject && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
-              onClick={() => setSelectedProject(null)}
-            >
-              <motion.div 
-                initial={{ scale: 0.95, y: 15 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.95, y: 15 }}
-                className="bg-white border-2 border-black max-w-2xl w-full p-6 sm:p-8 relative text-left"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {/* Close Button */}
-                <button 
-                  onClick={() => setSelectedProject(null)}
-                  className="absolute top-4 right-4 text-black hover:text-industrial-red p-1 border border-black hover:border-industrial-red bg-white cursor-pointer"
-                  aria-label="Close details"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-
-                {/* Header Information */}
-                <div className="border-b border-black pb-4 mb-6">
-                  <span className="font-mono text-xs text-engineering-blue font-bold uppercase tracking-widest block mb-1">
-                    {selectedProject.category} // CALIBRATED v2025
-                  </span>
-                  <h3 className="font-display font-black text-2xl sm:text-3xl text-black">
-                    {selectedProject.title}
-                  </h3>
-                  <p className="text-sm font-mono text-gray-500 mt-1">
-                    {selectedProject.location} — Completed {selectedProject.year}
-                  </p>
-                </div>
-
-                {/* Structural Image display */}
-                <div className="aspect-16/9 bg-gray-50 border border-black mb-6 overflow-hidden">
-                  <img 
-                    src={selectedProject.image} 
-                    alt={selectedProject.title} 
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover" 
-                  />
-                </div>
-
-                {/* Scope details list */}
-                <div>
-                  <h4 className="font-mono text-xs font-black text-black uppercase tracking-wider mb-3 flex items-center gap-1.5 border-b border-gray-100 pb-1">
-                    <Info className="h-4 w-4 text-industrial-red animate-pulse" />
-                    <span>ENGINEERING SPECIFICATIONS DATA SHEET</span>
-                  </h4>
-                  <ul className="space-y-2.5">
-                    {selectedProject.details.map((detail, dIdx) => (
-                      <li key={dIdx} className="flex items-start gap-2.5 text-sm font-sans text-gray-700">
-                        <span className="inline-block h-1.5 w-1.5 bg-black mt-2 shrink-0" />
-                        <span>{detail}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Footer specs stamp */}
-                <div className="mt-8 pt-4 border-t border-gray-100 flex items-center justify-between font-mono text-[10px] text-gray-400">
-                  <span>RECORD_UUID: {selectedProject.id.toUpperCase()}_CERT_STAMP</span>
-                  <span className="text-black font-bold">100% QUALITY APPROVED</span>
-                </div>
-
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
       </div>
     </section>

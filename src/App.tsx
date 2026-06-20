@@ -23,6 +23,13 @@ import Footer from './components/Footer';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<'home' | 'about' | 'services' | 'portfolio' | 'get-started' | 'privacy-policy' | 'terms-of-use' | 'safety-compliance'>('home');
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+
+  const handleProjectClick = (projectId: string) => {
+    setSelectedProjectId(projectId);
+    setCurrentView('portfolio');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleScrollToSection = (id: string) => {
     if (id === 'consultation') {
@@ -67,7 +74,10 @@ export default function App() {
       {/* Shared Navigation Bar */}
       <Navbar 
         currentView={currentView}
-        setView={setCurrentView}
+        setView={(view) => {
+          setSelectedProjectId(null);
+          setCurrentView(view);
+        }}
         onScrollToSection={handleScrollToSection}
       />
       
@@ -87,7 +97,7 @@ export default function App() {
           <Services />
           
           {/* Project Showcases Section */}
-          <Showcase />
+          <Showcase onProjectClick={handleProjectClick} />
           
           {/* Why Choose Us Pillars Section */}
           <WhyChooseUs />
@@ -109,7 +119,11 @@ export default function App() {
       )}
 
       {currentView === 'portfolio' && (
-        <PortfolioPage onScrollToSection={handleScrollToSection} />
+        <PortfolioPage 
+          onScrollToSection={handleScrollToSection} 
+          initialSelectedProjectId={selectedProjectId}
+          onClearSelectedProject={() => setSelectedProjectId(null)}
+        />
       )}
 
       {currentView === 'get-started' && (
@@ -129,7 +143,13 @@ export default function App() {
       )}
       
       {/* Shared Structurally Verified Footer */}
-      <Footer setView={setCurrentView} onScrollToSection={handleScrollToSection} />
+      <Footer 
+        setView={(view) => {
+          setSelectedProjectId(null);
+          setCurrentView(view);
+        }} 
+        onScrollToSection={handleScrollToSection} 
+      />
     </div>
   );
 }
